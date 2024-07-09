@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 import models, schemas
 
 
+#User functions
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
@@ -17,7 +18,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_user(db: Session, user: schemas.UserCreate):
-    fake_hashed_password = user.password + "notreallyhashed"
+    fake_hashed_password = user.password
     db_user = models.User(username=user.username, hashed_password=fake_hashed_password)
     try:
         db.add(db_user)
@@ -29,58 +30,90 @@ def create_user(db: Session, user: schemas.UserCreate):
         return None
 
 
+def update_user(db: Session, user_id: int, user_data: schemas.UserCreate):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    if db_user:
+        db_user.username = user_data.username
+        fake_hashed_password = user_data.password
+        db_user.hashed_password = fake_hashed_password
+        db.commit()
+        db.refresh(db_user)
+    return db_user
+
+
+def delete_user(db: Session, user_id: int):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    if db_user:
+        db.delete(db_user)
+        db.commit()
+        return db_user
+    else:
+        return None
+
+
+#Match functions
 def get_match(db: Session, match_id: int):
-    match = db.query(models.Match).filter(models.Match.id == match_id).first()
-    if match:
-        user_ids = [um.user_id for um in match.user_matches]
-        return schemas.Match(id=match.id, winner_score=match.winner_score, loser_score=match.loser_score, users=user_ids)
-    return None
+    return db.query(models.Match).filter(models.Match.id == match_id).first()
 
 
 def get_matches(db: Session, skip: int = 0, limit: int = 100):
-    matches = db.query(models.Match).offset(skip).limit(limit).all()
-    result = []
-    for match in matches:
-        user_ids = [um.user_id for um in match.user_matches]
-        result.append(schemas.Match(id=match.id, winner_score=match.winner_score, loser_score=match.loser_score, users=user_ids))
-    return result
-
+    return db.query(models.Match).offset(skip).limit(limit).all()
 
 
 def create_match(db: Session, match: schemas.MatchCreate):
-    try:
-        db.begin_nested()  # Start a nested transaction
+    # Ensure exactly 4 unique users are provided
+    unique_users = set(match.winners + match.losers)
+    if len(unique_users) != 4:
+        raise ValueError("Exactly 4 unique users must be provided in a match")
 
-        # Create the match object
-        db_match = models.Match(winner_score=match.winner_score, loser_score=match.loser_score)
-        db.add(db_match)
-        db.flush()  # Ensure the match ID is available
-        db.refresh(db_match)  # Refresh to get the generated ID
-
-        # Create user_match entries
-        user_matches = [
-            models.UserMatch(user_id=user_id, match_id=db_match.id)
-            for user_id in match.user_ids
-        ]
-        db.bulk_save_objects(user_matches)
-        db.commit()  # Commit the transaction
-
-        # Get user IDs
-        user_ids = [um.user_id for um in user_matches]
-
-    except Exception as e:
-        db.rollback()  # Rollback the transaction if any exception occurs
-        raise e
-
-    return schemas.Match(id=db_match.id, winner_score=match.winner_score, loser_score=match.loser_score, users=user_ids)
-
-
-def add_user_to_match(db: Session, user_match: schemas.UserMatchCreate):
-    db_user_match = models.UserMatch(user_id=user_match.user_id, match_id=user_match.match_id)
-    db.add(db_user_match)
+    db_match = models.Match(winner_score=match.winner_score, loser_score=match.loser_score)
+    db.add(db_match)
     db.commit()
-    db.refresh(db_user_match)
-    return db_user_match
+    db.refresh(db_match)
+
+    for user_id in match.winners:
+        user = db.query(models.User).filter(models.User.id == user_id).first()
+        db_match.winners.append(user)
+
+    for user_id in match.losers:
+        user = db.query(models.User).filter(models.User.id == user_id).first()
+        db_match.losers.append(user)
+
+    db.commit()
+    db.refresh(db_match)
+    return db_match
+
+
+def update_match(db: Session, match_id: int, match_data: schemas.MatchCreate):
+    db_match = db.query(models.Match).filter(models.Match.id == match_id).first()
+    if db_match:
+        db_match.winner_score = match_data.winner_score
+        db_match.loser_score = match_data.loser_score
+
+        # Clear existing winners and losers
+        db_match.winners.clear()
+        db_match.losers.clear()
+
+        # Add updated winners and losers
+        for user_id in match_data.winners:
+            user = db.query(models.User).filter(models.User.id == user_id).first()
+            db_match.winners.append(user)
+
+        for user_id in match_data.losers:
+            user = db.query(models.User).filter(models.User.id == user_id).first()
+            db_match.losers.append(user)
+
+        db.commit()
+        db.refresh(db_match)
+    return db_match
+
+
+def delete_match(db: Session, match_id: int):
+    db_match = db.query(models.Match).filter(models.Match.id == match_id).first()
+    if db_match:
+        db.delete(db_match)
+        db.commit()
+    return db_match
 
 
 #def get_user_matches(db: Session, user_id: int, skip: int = 0, limit: int = 100):
