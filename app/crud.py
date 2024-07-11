@@ -18,8 +18,8 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_user(db: Session, user: schemas.UserCreate):
-    fake_hashed_password = user.password
-    db_user = models.User(username=user.username, hashed_password=fake_hashed_password)
+    hashed_password = user.password
+    db_user = models.User(username=user.username, hashed_password=hashed_password)
     try:
         db.add(db_user)
         db.commit()
@@ -34,8 +34,8 @@ def update_user(db: Session, user_id: int, user_data: schemas.UserCreate):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if db_user:
         db_user.username = user_data.username
-        fake_hashed_password = user_data.password
-        db_user.hashed_password = fake_hashed_password
+        hashed_password = user_data.password
+        db_user.hashed_password = hashed_password
         db.commit()
         db.refresh(db_user)
     return db_user
