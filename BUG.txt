@@ -1,1 +1,1 @@
-- update user doesnt hash password
+- reading all users always unauthorized

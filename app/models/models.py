@@ -1,9 +1,13 @@
-from sqlalchemy import Column, Enum, Float, ForeignKey, Integer, String, Table
+from sqlalchemy import Boolean, Column, Enum, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+from app.database.database import Base
 
-Base = declarative_base()
 
+match_user_association = Table(
+    'match_user', Base.metadata,
+    Column('match_id', ForeignKey('matches.id'), primary_key=True),
+    Column('user_id', ForeignKey('users.id'), primary_key=True)
+)
 
 winners_table = Table(
     'winners',
@@ -37,6 +41,7 @@ class Match(Base):
     id = Column(Integer, primary_key=True, index=True)
     winner_score = Column(Integer, default=21)
     loser_score = Column(Integer)
-
+    creator_id = Column(Integer, nullable=False)
+    
     winners = relationship("User", secondary=winners_table, back_populates="matches_won")
     losers = relationship("User", secondary=losers_table, back_populates="matches_lost")
