@@ -1,1 +1,0 @@
-- reading all users always unauthorized

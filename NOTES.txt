@@ -1,0 +1,42 @@
+Next steps
+
+1. Create match and user instances so that when user or match is deleted/updated, it doesnt completely delete the user/match history associated with it
+- it seems like the matches table is doing a good job of keeping records even when users/matches are deleted, even through 500 internal server error, the user is deleted
+- full match history would be good if it just shows the full matches table, instead of it being dynamic
+
+**Test if order of games matter on rating
+if not
+- dont need update/delete match
+- unless there is an easy way to reverse process of deleting match without counteracting with another match
+
+
+Final backend check on features
+
+user
+- username
+- win rate
+- user's matches** would be good to get information from matches table just on user's match
+- **bonus, picture
+
+match
+- 2 winners
+- 2 losers
+- score
+- average elo
+- elo changes
+- creator_id
+- **bonus, date
+
+ 
+2. Clean up code if possible (not priority)
+
+3. Front end
+Choose frontend
+- react
+- html/css
+
+4. Docker
+
+
+5. Deploy
+aws

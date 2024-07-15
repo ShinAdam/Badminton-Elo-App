@@ -1,7 +1,6 @@
-from sqlalchemy import Boolean, Column, Enum, Float, ForeignKey, Integer, String, Table
+from sqlalchemy import Column, Integer, String, Float, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from app.database.database import Base
-
 
 match_user_association = Table(
     'match_user', Base.metadata,
@@ -34,7 +33,6 @@ class User(Base):
     matches_won = relationship("Match", secondary=winners_table, back_populates="winners")
     matches_lost = relationship("Match", secondary=losers_table, back_populates="losers")
 
-
 class Match(Base):
     __tablename__ = "matches"
 
@@ -42,6 +40,13 @@ class Match(Base):
     winner_score = Column(Integer, default=21)
     loser_score = Column(Integer)
     creator_id = Column(Integer, nullable=False)
-    
+
+    winner_usernames = Column(String, nullable=True)
+    loser_usernames = Column(String, nullable=True)
+    winner_avg_rating = Column(Float, nullable=True)
+    loser_avg_rating = Column(Float, nullable=True)
+    elo_change_winner = Column(Integer, nullable=True)
+    elo_change_loser = Column(Integer, nullable=True)
+
     winners = relationship("User", secondary=winners_table, back_populates="matches_won")
     losers = relationship("User", secondary=losers_table, back_populates="matches_lost")

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.auth.utils import get_current_user
-from app.crud.match import crud_create_match, crud_get_match, crud_get_matches, crud_update_match, crud_delete_match
+from app.crud.match import crud_create_match, crud_get_match_by_id
 from app.schemas.schemas import Match, MatchCreate
 from app.database.database import get_db
 
@@ -29,37 +29,23 @@ def create_match(match: MatchCreate, db: Session = Depends(get_db), current_user
     return response_match
 
 
-@router.get("/", response_model=list[Match])
-def read_matches(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    db_matches = crud_get_matches(db, skip=skip, limit=limit)
-    if db_matches is None:
-        raise HTTPException(status_code=404, detail="Match not found")
-    
-    # Convert the User objects in winners and losers to their IDs for each match
-    response_matches = []
-    for match in db_matches:
-        response_match = Match(
-            id=match.id,
-            winner_score=match.winner_score,
-            loser_score=match.loser_score,
-            creator_id=match.creator_id,
-            winners=[user.id for user in match.winners],
-            losers=[user.id for user in match.losers]
-        )
-        response_matches.append(response_match)
-    
-    return response_matches
-
-
 @router.get("/{match_id}", response_model=Match)
-def read_match(match_id: int, db: Session = Depends(get_db)):
-    match_details = crud_get_match(db, match_id=match_id)
-    if match_details is None:
+def get_match_by_match_id(match_id: int, db: Session = Depends(get_db)):
+    match = crud_get_match_by_id(db, match_id)
+    if not match:
         raise HTTPException(status_code=404, detail="Match not found")
-    return match_details
 
-@router.put("/{match_id}", response_model=Match)
-def update_match(match_id: int, match: MatchCreate, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+    # Convert the winners and losers into comma-separated strings
+    if match.winners:
+        match.winner_usernames = ','.join([user.username for user in match.winners])
+    if match.losers:
+        match.loser_usernames = ','.join([user.username for user in match.losers])
+    
+    return match
+
+#Edit match feature, to be updated later
+#@router.put("/{match_id}", response_model=Match)
+#def update_match(match_id: int, match: MatchCreate, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     db_match = crud_update_match(db=db, match_id=match_id, match_data=match, current_user_id=current_user["id"])
     if db_match is None:
         raise HTTPException(status_code=404, detail="Match not found")
@@ -75,9 +61,9 @@ def update_match(match_id: int, match: MatchCreate, db: Session = Depends(get_db
     )
     return response_match
 
-
-@router.delete("/{match_id}", response_model=Match)
-def delete_match(match_id: int, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+#delete match feature, to be updated later
+#@router.delete("/{match_id}", response_model=Match)
+#def delete_match(match_id: int, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     db_match = crud_delete_match(db=db, match_id=match_id, current_user_id=current_user["id"])
     if db_match is None:
         raise HTTPException(status_code=404, detail="Match not found")

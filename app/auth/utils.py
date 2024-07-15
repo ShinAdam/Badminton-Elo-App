@@ -1,10 +1,9 @@
-from datetime import timedelta, datetime, UTC, timezone
-from typing import Annotated
+from datetime import timedelta, datetime, timezone
+import bcrypt
 from fastapi import Depends, HTTPException
 from pydantic import BaseModel
 from starlette import status
 from sqlalchemy.orm import Session
-from app.database.database import get_db
 from app.models.models import User
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
@@ -58,3 +57,8 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
     except JWTError:
         raise credentials_exception
     return {"username": username, "id": user_id}
+
+def get_password_hash(password: str) -> str:
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password.decode('utf-8')
