@@ -1,6 +1,5 @@
 from fastapi import FastAPI
-from app.auth import auth
-from app.routers import users, matches, statistics
+from app.routers import users, matches, statistics, auth
 from app.database.database import Base, engine
 
 app = FastAPI()

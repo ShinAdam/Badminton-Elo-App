@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 from pydantic import BaseModel, Field
 
@@ -9,6 +10,7 @@ class MatchBase(BaseModel):
 class MatchCreate(MatchBase):
     winners: list[int] = []
     losers: list[int] = []
+    date_played: date
 
 class MatchUpdate(MatchBase):
     pass
@@ -22,6 +24,7 @@ class Match(MatchBase):
     loser_avg_rating: Optional[float] = None
     elo_change_winner: Optional[float] = None
     elo_change_loser: Optional[float] = None
+    date_played: Optional[date] = None
 
     class Config:
         from_attributes = True
@@ -32,10 +35,14 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    bio: Optional[str] = None
+    picture: Optional[str] = None
 
 class UserUpdate(UserBase):
     username: str = Field(None, title="Updated Username")
     password: str = Field(None, title="Updated Password")
+    bio: Optional[str] = None
+    picture: Optional[str] = None
 
     class Config:
         from_attributes = True

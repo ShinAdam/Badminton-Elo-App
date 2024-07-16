@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Float, Table, ForeignKey
+from datetime import date
+from sqlalchemy import Column, Date, Integer, String, Float, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from app.database.database import Base
 
@@ -29,6 +30,8 @@ class User(Base):
     username = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String)
     rating = Column(Float, default=1000, index=True)
+    bio = Column(String, nullable=True)
+    picture = Column(String, nullable=True)
 
     matches_won = relationship("Match", secondary=winners_table, back_populates="winners")
     matches_lost = relationship("Match", secondary=losers_table, back_populates="losers")
@@ -40,6 +43,7 @@ class Match(Base):
     winner_score = Column(Integer, default=21)
     loser_score = Column(Integer)
     creator_id = Column(Integer, nullable=False)
+    date_played = Column(Date, default=date.today())
 
     winner_usernames = Column(String, nullable=True)
     loser_usernames = Column(String, nullable=True)

@@ -20,7 +20,8 @@ def crud_create_match(db: Session, match: MatchCreate, current_user_id: int) -> 
     db_match = Match(
         winner_score=match.winner_score,
         loser_score=match.loser_score,
-        creator_id=current_user_id
+        creator_id=current_user_id,
+        date_played=match.date_played
     )
     db.add(db_match)
     db.commit()

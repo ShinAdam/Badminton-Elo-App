@@ -1,23 +1,20 @@
 from datetime import timedelta, datetime, timezone
-import bcrypt
+from typing import Annotated
 from fastapi import Depends, HTTPException
 from pydantic import BaseModel
 from starlette import status
 from sqlalchemy.orm import Session
-from app.models.models import User
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
-
+from app.models.models import User
 
 SECRET_KEY = 'secret123'
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 20
 
-
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="auth/token")
-
 
 class Token(BaseModel):
     access_token: str
@@ -25,9 +22,7 @@ class Token(BaseModel):
 
 def authenticate_user(username: str, password: str, db: Session):
     user = db.query(User).filter(User.username == username).first()
-    if not user:
-        return False
-    if not bcrypt_context.verify(password, user.hashed_password):
+    if not user or not bcrypt_context.verify(password, user.hashed_password):
         return False
     return user
 
@@ -40,7 +35,6 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
-
 
 async def get_current_user(token: str = Depends(oauth2_bearer)):
     credentials_exception = HTTPException(
@@ -59,6 +53,4 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
     return {"username": username, "id": user_id}
 
 def get_password_hash(password: str) -> str:
-    salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hashed_password.decode('utf-8')
+    return bcrypt_context.hash(password)
