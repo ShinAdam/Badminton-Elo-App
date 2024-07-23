@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../api/axiosConfig';
 import './UserProfile.css'; // Import the CSS file
 
@@ -9,15 +9,19 @@ function UserProfile() {
   const [error, setError] = useState('');
   const [matches, setMatches] = useState([]);
   const [winPercentage, setWinPercentage] = useState(0);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axiosInstance.get(`/users/${user_id}`);
         setUser(response.data);
-        setWinPercentage(response.data.win_percentage); // Set win percentage
+        setWinPercentage(response.data.win_percentage);
+        console.log('User Data:', response.data); // Debugging statement
       } catch (err) {
         setError('Failed to fetch user data');
+        console.error('Error fetching user data:', err); // Debugging statement
       }
     };
 
@@ -25,14 +29,34 @@ function UserProfile() {
       try {
         const response = await axiosInstance.get(`/users/${user_id}/matches`);
         setMatches(response.data);
+        console.log('User Matches:', response.data); // Debugging statement
       } catch (err) {
         setError('Failed to fetch user matches');
+        console.error('Error fetching user matches:', err); // Debugging statement
+      }
+    };
+
+    const fetchCurrentUserId = async () => {
+      try {
+        const response = await axiosInstance.get('/auth/self');
+        setCurrentUserId(response.data.id);
+        console.log('Current User ID:', response.data.id); // Debugging statement
+      } catch (err) {
+        // Do not redirect to login; handle errors gracefully
+        if (err.response && err.response.status === 401) {
+          console.warn('Not authenticated, but still show user profile');
+          // Optionally: show message or handle specific behavior
+        } else {
+          setError('Failed to fetch current user data');
+          console.error('Error fetching current user data:', err); // Debugging statement
+        }
       }
     };
 
     fetchUserData();
     fetchUserMatches();
-  }, [user_id]);
+    fetchCurrentUserId();
+  }, [user_id, navigate]);
 
   if (error) {
     return <p className="error-message">{error}</p>;
@@ -42,10 +66,9 @@ function UserProfile() {
     return <p className="loading-message">Loading...</p>;
   }
 
-  // Construct the correct URL for the profile picture
   const pictureUrl = user.picture 
-  ? `http://localhost:8000/static/${user.picture}`
-  : `http://localhost:8000/static/default.jpg`;
+    ? `http://localhost:8000/static/${user.picture}`
+    : `http://localhost:8000/static/default.jpg`;
 
   return (
     <div className="user-profile">
@@ -56,10 +79,17 @@ function UserProfile() {
         <p><strong>Win Percentage:</strong> {winPercentage.toFixed(2)}%</p>
         <p><strong>Bio:</strong> {user.bio || 'N/A'}</p>
         <p><strong>Picture:</strong></p>
-        {user.picture && 
-          (<img src={pictureUrl} alt={`${user.username}'s profile`} className="profile-picture" />)
-        }
+        {user.picture && (
+          <img src={pictureUrl} alt={`${user.username}'s profile`} className="profile-picture" />
+        )}
       </div>
+      {currentUserId && currentUserId.toString() === user.id.toString() && (
+        <div className="edit-profile">
+          <Link to={`/users/${user.id}/edit`} className="nav-button">
+            Edit Profile
+          </Link>
+        </div>
+      )}
       <h2 className="matches-title">Matches</h2>
       <div className="matches-container">
         {matches.length > 0 ? (

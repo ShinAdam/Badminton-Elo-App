@@ -1,42 +1,43 @@
-/* src/components/FullMatchHistory.css */
 .full-match-history {
-    padding: 20px;
-  }
-  
-  .history-title {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .matches-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
+  padding: 20px;
+}
+
+.history-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.matches-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.match-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.match-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.winner-stats,
+.loser-stats {
+  margin-top: 10px;
+}
+
+.loading-message,
+.error-message {
+  text-align: center;
+  color: red;
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
   .match-card {
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+      padding: 10px;
   }
-  
-  .match-info {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .winner-stats, .loser-stats {
-    width: 48%;
-  }
-  
-  .error-message {
-    color: red;
-    text-align: center;
-  }
-  
-  .loading-message {
-    text-align: center;
-    font-style: italic;
-  }
-  
+}

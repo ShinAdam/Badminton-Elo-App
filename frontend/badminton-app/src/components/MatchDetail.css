@@ -1,32 +1,32 @@
 .match-detail {
-    padding: 20px;
-  }
-  
-  .match-title {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
+  padding: 20px;
+}
+
+.match-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.match-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.winner-stats,
+.loser-stats {
+  margin-top: 10px;
+}
+
+.loading-message,
+.error-message {
+  text-align: center;
+  color: red;
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
   .match-info {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+      padding: 10px;
   }
-  
-  .winner-stats, .loser-stats {
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-  }
-  
-  .error-message {
-    color: red;
-    text-align: center;
-  }
-  
-  .loading-message {
-    text-align: center;
-    font-style: italic;
-  }
-  
+}

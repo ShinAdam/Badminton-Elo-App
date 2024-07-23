@@ -10,6 +10,9 @@ function Home() {
         <Link to="/users/ranking" className="nav-button">
           View Rankings
         </Link>
+        <Link to="/statistics/full_match_history" className="nav-button">
+          View Full Match History
+        </Link>
         <Link to="/auth/login" className="nav-button">
           Login
         </Link>

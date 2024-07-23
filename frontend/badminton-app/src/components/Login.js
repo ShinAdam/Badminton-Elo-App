@@ -25,8 +25,14 @@ const Login = () => {
                 const { access_token } = response.data;
                 const decodedToken = jwtDecode(access_token); // Use named import
                 const userId = decodedToken.id; // Extract user ID from token
+                
+                // Save the token in localStorage
+                localStorage.setItem('access_token', access_token);
 
-                navigate(`/users/${userId}`); // Redirect to the user's profile page
+                // Update the global state or context if needed
+                // Example: Force a navigation to trigger UI update
+                navigate(`/users/${userId}`, { replace: true }); // Use replace to avoid adding to history stack
+                window.location.reload(); // Reload the page
             } else {
                 setErrorMessage('Login failed');
             }

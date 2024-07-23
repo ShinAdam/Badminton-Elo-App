@@ -1,14 +1,5 @@
-/* Rankings.css */
-
 .ranking-page {
-  max-width: 800px;
-  margin: 0 auto;
   padding: 20px;
-}
-
-.ranking-page h1 {
-  text-align: center;
-  margin-bottom: 20px;
 }
 
 .ranking-table {
@@ -18,40 +9,25 @@
 
 .ranking-table th,
 .ranking-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
 }
 
 .ranking-table th {
   background-color: #f4f4f4;
-  text-align: left;
 }
 
-.ranking-table td {
-  text-align: left;
-}
-
-.ranking-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.ranking-table tr:hover {
-  background-color: #f1f1f1;
-}
-
-.ranking-table td a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.ranking-table td a:hover {
-  text-decoration: underline;
+.loading-message,
+.error-message {
+  text-align: center;
+  color: red;
+  margin-top: 20px;
 }
 
 @media (max-width: 600px) {
-  .ranking-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+  .ranking-table th,
+  .ranking-table td {
+      padding: 8px;
   }
 }

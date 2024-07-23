@@ -32,6 +32,24 @@ def authenticate_user(username: str, password: str, db: Session):
         return False
     return user
 
+blacklist: set[str] = set()
+
+def revoke_token(token: str):
+    blacklist.add(token)
+
+def is_token_blacklisted(token: str) -> bool:
+    return token in blacklist
+
+def verify_token(token: str) -> dict:
+    if is_token_blacklisted(token):
+        raise HTTPException(status_code=401, detail="Token has been revoked")
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     if expires_delta:
@@ -40,44 +58,42 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
         expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+        # Log or print the token
+    print("Generated Token:", encoded_jwt)  # This will print to the console/log
+    
     return encoded_jwt
 
-async def get_current_user(token: str = Depends(oauth2_bearer)):
+def get_current_user(token: str = Depends(oauth2_bearer)) -> dict:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        user_id: int = payload.get("id")
-        if username is None or user_id is None:
-            raise credentials_exception
-    except JWTError:
+    
+    payload = verify_token(token)  # Use verify_token to decode and validate the token
+    username: str = payload.get("sub")
+    user_id: int = payload.get("id")
+    
+    if username is None or user_id is None:
         raise credentials_exception
     return {"username": username, "id": user_id}
 
+
 def get_password_hash(password: str) -> str:
     return bcrypt_context.hash(password)
+
 
 def save_picture(file_data: bytes, user_id: int) -> str:
     file_extension = imghdr.what(None, file_data)
     if not file_extension:
         raise ValueError("Invalid image format")
-    # Create a unique filename based on user_id
     file_location = f"profile_pics/profile_picture_user{user_id}.{file_extension}"
     
-    # Get the absolute path to the current file's directory (utils.py)
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    
-    # Construct the full path to the static directory (two levels up)
     static_directory = os.path.normpath(os.path.join(current_dir, '..', 'static'))
-    
-    # Ensure the 'profile_pics' directory exists
     os.makedirs(os.path.join(static_directory, "profile_pics"), exist_ok=True)
     
-    # Save the file in the correct location
     with open(os.path.join(static_directory, file_location), "wb") as f:
         f.write(file_data)
     

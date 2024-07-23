@@ -1,5 +1,6 @@
 import base64
 from datetime import timedelta
+import logging
 import os
 from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
@@ -10,7 +11,7 @@ from app.database.database import SessionLocal, get_db
 from app.models.models import User
 from fastapi.security import OAuth2PasswordRequestForm
 from app.schemas.schemas import UserCreate
-from app.auth.utils import ACCESS_TOKEN_EXPIRE_MINUTES, LoginRequest, get_password_hash, create_access_token, authenticate_user, Token, get_current_user, save_picture
+from app.auth.utils import ACCESS_TOKEN_EXPIRE_MINUTES, LoginRequest, get_password_hash, create_access_token, authenticate_user, Token, get_current_user, revoke_token, save_picture, oauth2_bearer
 
 router = APIRouter(
     prefix="/auth",
@@ -83,3 +84,20 @@ async def login_for_access_token(
     token = create_access_token(data={"sub": user.username, "id": user.id}, expires_delta=token_expires)
 
     return {"access_token": token, "token_type": "bearer"}
+
+
+@router.get("/self", response_model=dict[str, str])
+async def get_self(user: dict = Depends(get_current_user)):
+    try:
+        return {"username": user["username"], "id": str(user["id"])}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.post("/logout")
+def logout(token: str = Depends(oauth2_bearer), db: Session = Depends(get_db)):
+    try:
+        revoke_token(token)
+        return {"message": "Successfully logged out"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

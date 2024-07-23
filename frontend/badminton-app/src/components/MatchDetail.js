@@ -29,11 +29,6 @@ function MatchDetail() {
     return <p className="loading-message">Loading...</p>;
   }
 
-  // Construct the correct URL for the profile picture
-  const pictureUrl = match.picture 
-    ? `http://localhost:8000/${match.picture}`
-    : `http://localhost:8000/default.png`;
-
   return (
     <div className="match-detail">
       <h1 className="match-title">Match Details</h1>

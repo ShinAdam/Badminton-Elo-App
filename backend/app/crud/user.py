@@ -1,13 +1,17 @@
+import base64
 from fastapi import HTTPException
 from psycopg2 import IntegrityError
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
-from app.auth.utils import get_password_hash
+from app.auth.utils import get_password_hash, save_picture
 from app.models.models import User, Match
 from app.schemas.schemas import UserCreate, UserUpdate
 
 # User functions
 def crud_get_user(db: Session, user_id: int):
+    return db.query(User).filter(User.id == user_id).first()
+
+def crud_get_user_by_id(db: Session, user_id: int) -> User:
     return db.query(User).filter(User.id == user_id).first()
 
 def crud_get_user_by_username(db: Session, username: str):
@@ -46,7 +50,14 @@ def crud_update_user(db: Session, user_id: int, user_data: UserUpdate, current_u
     if user_data.password:
         db_user.hashed_password = get_password_hash(user_data.password)
     db_user.bio = user_data.bio
-    db_user.picture = user_data.picture
+
+    if user_data.picture:
+        try:
+            picture_data = base64.b64decode(user_data.picture)
+            picture_path = save_picture(picture_data, user_id)
+            db_user.picture = picture_path
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
 
     db.commit()
     db.refresh(db_user)

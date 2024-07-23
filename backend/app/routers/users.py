@@ -1,3 +1,4 @@
+import logging
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -6,7 +7,7 @@ from app.auth.utils import get_current_user
 from app.crud.statistic import crud_get_user_win_percentage
 from app.crud.user import crud_get_user, crud_get_user_matches, crud_get_users_by_rating, crud_update_user, crud_delete_user
 from app.schemas.schemas import Match, User, UserRanking, UserUpdate
-from app.models.models import User as Usermodel
+from app.models.models import User as UserModel
 from app.database.database import get_db
 
 router = APIRouter(
@@ -49,21 +50,19 @@ def read_user_by_id(user_id: int, db: Session = Depends(get_db)):
     return response_user
 
 
-@router.put("/{user_id}", response_model=User)
+@router.put("/{user_id}/edit", response_model=User)
 def update_user(
     user_id: int,
     user: UserUpdate,
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_user)
 ):
-    # Check if the user is attempting to update their own profile
     if user_id != current_user["id"]:
         raise HTTPException(
             status_code=403,
             detail="You are not authorized to update this user."
         )
 
-    # Proceed with updating the user's profile
     db_user = crud_update_user(
         db=db,
         user_id=user_id,
@@ -73,7 +72,6 @@ def update_user(
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     
-    # Calculate win percentage
     total_matches = len(db_user.matches_won) + len(db_user.matches_lost)
     win_percentage = (len(db_user.matches_won) / total_matches) * 100 if total_matches > 0 else 0
 
@@ -88,7 +86,7 @@ def update_user(
     return response_user
 
 
-@router.delete("/{user_id}", response_model=User)
+@router.delete("/{user_id}/delete", response_model=User)
 def delete_user(user_id: int, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     db_user = crud_delete_user(db=db, user_id=user_id, current_user_id=current_user["id"])
     if db_user is None:
