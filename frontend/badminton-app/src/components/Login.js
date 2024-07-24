@@ -1,5 +1,6 @@
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // Corrected the import statement
 import React, { useState } from 'react';
+import { Alert, Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosConfig';
 import './Login.css'; // Import the CSS file
@@ -47,28 +48,42 @@ const Login = () => {
 
     return (
         <div className="login-container">
-            <h2>Login</h2>
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
-            <form onSubmit={handleSubmit} className="login-form">
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <button type="submit">Login</button>
-            </form>
-            <div className="login-links">
-                <button onClick={() => navigate('/')}>Back to Home</button>
-                <button onClick={() => navigate('/auth/register')}>Register a New User</button>
+            <div className="form-container">
+                <h2 className="login-header">Login</h2>
+                {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group className="form-group" controlId="formUsername">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                    </Form.Group>
+                    <Form.Group className="form-group" controlId="formPassword">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            placeholder="Enter password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </Form.Group>
+                    <Button variant="primary" type="submit" className="submit-button">
+                        Login
+                    </Button>
+                </Form>
+                <div className="action-buttons">
+                    <Button variant="link" onClick={() => navigate('/')}>
+                        Back to Home
+                    </Button>
+                    <Button variant="link" onClick={() => navigate('/auth/register')}>
+                        Don't have an account? Sign up
+                    </Button>
+                </div>
             </div>
         </div>
     );

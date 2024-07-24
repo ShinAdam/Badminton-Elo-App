@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Table } from 'react-bootstrap';
 import axiosInstance from '../api/axiosConfig';
 import './FullMatchHistory.css'; // Import the CSS file
 
@@ -10,7 +11,9 @@ function FullMatchHistory() {
     const fetchMatchHistory = async () => {
       try {
         const response = await axiosInstance.get('/statistics/full_match_history');
-        setMatches(response.data);
+        // Sort matches by date_played in descending order
+        const sortedMatches = response.data.sort((a, b) => new Date(b.date_played) - new Date(a.date_played));
+        setMatches(sortedMatches);
       } catch (err) {
         setError('Failed to fetch match history');
       }
@@ -30,26 +33,70 @@ function FullMatchHistory() {
   return (
     <div className="full-match-history">
       <h1 className="history-title">Full Match History</h1>
-      <div className="matches-container">
+      
+      {/* Desktop Table */}
+      <Table striped bordered hover className="match-table d-none d-md-table">
+        <thead>
+          <tr>
+            <th className="winner-section d-none d-md-table-cell">ELO Change</th>
+            <th className="winner-section d-none d-md-table-cell">Average Rating</th>
+            <th className="winner-section">Usernames</th>
+            <th>Score</th>
+            <th className="loser-section">Usernames</th>
+            <th className="loser-section d-none d-md-table-cell">Average Rating</th>
+            <th className="loser-section d-none d-md-table-cell">ELO Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          {matches.map((match) => (
+            <tr
+              key={match.id}
+              className="match-row"
+              onClick={() => window.location.href = `/matches/${match.id}`}
+              style={{ cursor: 'pointer' }}
+            >
+              <td className="winner-section d-none d-md-table-cell"><strong>+{match.elo_change_winner}</strong></td>
+              <td className="winner-section d-none d-md-table-cell">{Math.round(match.winner_avg_rating)}</td>
+              <td className="winner-section">
+                {match.winner_usernames.split(',').map((username, index) => (
+                  <div key={index} className="username">{username.trim()}</div>
+                ))}
+              </td>
+              <td className="score-section">
+                {match.winner_score} - {match.loser_score}
+                <div className="match-date">
+                  {new Date(match.date_played).toLocaleDateString()}
+                </div>
+              </td>
+              <td className="loser-section">
+                {match.loser_usernames.split(',').map((username, index) => (
+                  <div key={index} className="username">{username.trim()}</div>
+                ))}
+              </td>
+              <td className="loser-section d-none d-md-table-cell">{Math.round(match.loser_avg_rating)}</td>
+              <td className="loser-section d-none d-md-table-cell"><strong>{match.elo_change_loser}</strong></td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+
+      {/* Mobile Table */}
+      <div className="d-md-none">
         {matches.map((match) => (
-          <div key={match.id} className="match-card">
-            <div className="match-info">
-              <div className="winner-stats">
-                <h3>Winners</h3>
-                <p><strong>Rating Change:</strong> {match.elo_change_winner}</p>
-                <p><strong>Average Rating:</strong> {match.winner_avg_rating}</p>
-                <p><strong>Usernames:</strong> {match.winner_usernames.split(',').join(', ')}</p>
-                <p><strong>Score:</strong> {match.winner_score}</p>
-              </div>
-              <div className="loser-stats">
-                <h3>Losers</h3>
-                <p><strong>Rating Change:</strong> {match.elo_change_loser}</p>
-                <p><strong>Average Rating:</strong> {match.loser_avg_rating}</p>
-                <p><strong>Usernames:</strong> {match.loser_usernames.split(',').join(', ')}</p>
-                <p><strong>Score:</strong> {match.loser_score}</p>
-              </div>
+          <div key={match.id} className="mobile-match-row" onClick={() => window.location.href = `/matches/${match.id}`} style={{ cursor: 'pointer' }}>
+            <div className="mobile-winner-section">
+              {match.winner_usernames.split(',').map((username, index) => (
+                <div key={index} className="username">{username.trim()}</div>
+              ))}
             </div>
-            <p><strong>Date Played:</strong> {new Date(match.date_played).toLocaleDateString()}</p>
+            <div className="mobile-score-section">
+              {match.winner_score} - {match.loser_score}
+            </div>
+            <div className="mobile-loser-section">
+              {match.loser_usernames.split(',').map((username, index) => (
+                <div key={index} className="username">{username.trim()}</div>
+              ))}
+            </div>
           </div>
         ))}
       </div>

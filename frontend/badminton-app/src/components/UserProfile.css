@@ -1,55 +1,178 @@
-.register-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f9f9f9;
-  padding: 20px;
+/* General styles for user profile */
+.user-profile {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
-.register-container h2 {
-  margin-bottom: 20px;
+.profile-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
 }
 
-.register-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 400px;
+.profile-picture {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    margin-right: 20px;
 }
 
-.register-form input,
-.register-form textarea {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+.profile-username {
+    font-size: 2em;
+    margin: 0;
 }
 
-.register-form button {
-  width: 100%;
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
+.profile-elo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 200px;
+    margin-left: auto;
 }
 
-.register-form button:hover {
-  background-color: #45a049;
+.profile-elo {
+    margin: 0;
+    font-size: 1.5em;
 }
 
-.register-form input[type="file"] {
-  padding: 0;
+.win-percentage-chart {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin-top: 10px;
+}
+
+.win-percentage-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.user-details {
+    margin-top: 20px;
+    font-size: 1.1em;
+}
+
+.matches-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.matches-title {
+    font-size: 1.5em;
+}
+
+.match-table {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Mobile view adjustments */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: center; /* Center align items */
+    }
+
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto; /* Center align the picture */
+    }
+
+    .profile-info {
+        align-items: center;
+        margin-top: 10px;
+        height: auto; /* Remove fixed height */
+    }
+
+    .profile-username {
+        font-size: 1.5em;
+    }
+
+    .profile-elo-container {
+        margin-left: 0;
+    }
+
+    .user-details {
+        font-size: 1.1em;
+    }
+
+    .match-table {
+        display: block;
+        width: 100%;
+    }
+
+    .match-table th,
+    .match-table td {
+        padding: 8px;
+        display: block;
+        text-align: center;
+    }
+
+    .match-table th {
+        display: none;
+    }
+
+    .match-table tr {
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .match-table td {
+        padding: 10px 0;
+    }
+
+    .match-date {
+        margin-top: 5px;
+        font-size: 0.9em;
+        color: grey;
+    }
+
+    .mobile-match-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .mobile-match-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .mobile-match-username {
+        margin-bottom: 10px;
+    }
+
+    .mobile-match-score {
+        font-size: 1.2em;
+        margin: 10px 0;
+    }
+
+    .win-percentage-chart {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        margin-top: 10px;
+    }
 }
 
 .error-message {
-  color: red;
-  margin-bottom: 10px;
+    color: red;
+    font-weight: bold;
+}
+
+.loading-message {
+    font-weight: bold;
 }

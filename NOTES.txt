@@ -1,7 +1,9 @@
 Next steps
 
-3. Design frontend to look nice
-    - start with making matches clickable to see matchdetail.js
+fix frontend.
+adamshin
+asd 
+
 
 4. Docker
 

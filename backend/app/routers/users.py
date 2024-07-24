@@ -1,6 +1,8 @@
 import logging
+import os
 from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from app.auth.utils import get_current_user
@@ -45,15 +47,15 @@ def read_user_by_id(user_id: int, db: Session = Depends(get_db)):
         "matches_lost": [match.id for match in db_user.matches_lost],
         "win_percentage": win_percentage,
         "bio": db_user.bio or None,
-        "picture": db_user.picture or None  # Ensure only relative path is returned
+        "picture": db_user.picture or None
     }
     return response_user
 
 
 @router.put("/{user_id}/edit", response_model=User)
-def update_user(
+async def update_user(
+    request: Request,
     user_id: int,
-    user: UserUpdate,
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_user)
 ):
@@ -63,15 +65,26 @@ def update_user(
             detail="You are not authorized to update this user."
         )
 
+    data = await request.json()
+    username = data.get('username')
+    password = data.get('password')
+    bio = data.get('bio')
+    picture_name = data.get('picture')  # Get preset picture name
+
+    user_data = UserUpdate(username=username, bio=bio, picture=picture_name)
+
+    if password:
+        user_data.password = password
+
     db_user = crud_update_user(
         db=db,
         user_id=user_id,
-        user_data=user,
+        user_data=user_data,
         current_user_id=current_user["id"]
     )
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
-    
+
     total_matches = len(db_user.matches_won) + len(db_user.matches_lost)
     win_percentage = (len(db_user.matches_won) / total_matches) * 100 if total_matches > 0 else 0
 
@@ -108,5 +121,21 @@ def read_user_matches(user_id: int, db: Session = Depends(get_db)):
     user_matches = crud_get_user_matches(db=db, user_id=user_id)
     if user_matches is None:
         raise HTTPException(status_code=404, detail="Matches not found for this user")
-    return user_matches
-
+    
+    matches_response = []
+    for match in user_matches:
+        matches_response.append({
+            "id": match.id,
+            "creator_id": match.creator_id,
+            "winner_usernames": match.winner_usernames.strip('{}').replace(',', ', '),
+            "loser_usernames": match.loser_usernames.strip('{}').replace(',', ', '),
+            "winner_avg_rating": match.winner_avg_rating,
+            "loser_avg_rating": match.loser_avg_rating,
+            "elo_change_winner": match.elo_change_winner,
+            "elo_change_loser": match.elo_change_loser,
+            "winner_score": match.winner_score,
+            "loser_score": match.loser_score,
+            "date_played": match.date_played.isoformat()
+        })
+    
+    return matches_response

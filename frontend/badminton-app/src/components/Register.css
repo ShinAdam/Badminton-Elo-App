@@ -1,38 +1,100 @@
+/* Container for the whole register page */
 .register-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    min-height: 100vh;
+    padding-top: 50px; /* Adjust top padding to move content down from the very top */
 }
 
-.register-form {
-    display: flex;
-    flex-direction: column;
+/* Container for the registration form */
+.form-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 500px; /* Adjust based on your desired width */
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff; /* Background color */
 }
 
-.register-form input,
-.register-form textarea {
-    margin: 10px 0;
-    padding: 10px;
-    font-size: 16px;
+/* Additional styles for the registration header */
+.form-container h2 {
+    margin-bottom: 1rem; /* Equivalent to 4 units */
+    text-align: center;
 }
 
-.register-form button {
-    margin-top: 20px;
-    padding: 10px;
-    font-size: 16px;
+/* Styles for form and buttons */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.submit-button {
+    width: 100%;
+}
+
+.action-buttons {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.custom-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.text-danger {
+    font-size: 0.875rem;
+    color: #dc3545; /* Bootstrap's danger color */
+    margin-top: 0.25rem;
+}
+
+.custom-dropdown-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
     cursor: pointer;
 }
 
-.error-message {
-    color: red;
-    margin-bottom: 10px;
+.custom-dropdown-button img {
+    width: 50px; /* Size of the preview image */
+    height: 50px;
+    margin-right: 10px;
 }
 
-@media (max-width: 600px) {
-    .register-form {
-        width: 90%;
-    }
+.custom-dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 1;
+    width: 100%;
+    max-height: 200px; /* Adjust as needed */
+    overflow-y: auto;
+}
+
+.custom-dropdown-menu.show {
+    display: block;
+}
+
+.custom-dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.custom-dropdown-item img {
+    width: 200px; /* Size of the preview image */
+    height: 200px;
+    margin-right: 10px;
+}
+
+.custom-dropdown-item:hover {
+    background-color: #f0f0f0;
 }

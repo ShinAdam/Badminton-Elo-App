@@ -6,6 +6,8 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [currentUserId, setCurrentUserId] = useState(null);
+    const [currentUsername, setCurrentUsername] = useState(''); // Add this state
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -13,16 +15,22 @@ export function AuthProvider({ children }) {
             const token = localStorage.getItem('access_token');
             if (!token) {
                 setIsAuthenticated(false);
+                setCurrentUserId(null);
+                setCurrentUsername(''); // Clear username if not authenticated
                 return;
             }
 
             try {
-                await axiosInstance.get('/auth/self', {
+                const response = await axiosInstance.get('/auth/self', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setIsAuthenticated(true);
+                setCurrentUserId(response.data.id);
+                setCurrentUsername(response.data.username); // Set the username
             } catch (err) {
                 setIsAuthenticated(false);
+                setCurrentUserId(null);
+                setCurrentUsername(''); // Clear username on error
             }
         };
 
@@ -35,6 +43,13 @@ export function AuthProvider({ children }) {
             const { access_token } = response.data;
             localStorage.setItem('access_token', access_token);
             setIsAuthenticated(true);
+
+            // Fetch the user details after logging in
+            const userResponse = await axiosInstance.get('/auth/self', {
+                headers: { Authorization: `Bearer ${access_token}` }
+            });
+            setCurrentUserId(userResponse.data.id);
+            setCurrentUsername(userResponse.data.username); // Set the username
         } catch (err) {
             console.error('Login failed', err);
         }
@@ -45,6 +60,8 @@ export function AuthProvider({ children }) {
             await axiosInstance.post('/auth/logout');
             localStorage.removeItem('access_token');
             setIsAuthenticated(false);
+            setCurrentUserId(null);
+            setCurrentUsername(''); // Clear username on logout
             navigate('/auth/login'); // Redirect to login page
         } catch (err) {
             console.error('Logout failed', err);
@@ -52,7 +69,7 @@ export function AuthProvider({ children }) {
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, login, logout, currentUserId, currentUsername }}>
             {children}
         </AuthContext.Provider>
     );

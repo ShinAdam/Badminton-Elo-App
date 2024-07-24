@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { Alert, Container, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../api/axiosConfig';
-import './Ranking.css';
 
 function Ranking() {
   const [users, setUsers] = useState([]);
@@ -20,38 +20,37 @@ function Ranking() {
     fetchRanking();
   }, []);
 
-  if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>;
-  }
-
-  if (users.length === 0) {
-    return <p>Loading...</p>;
-  }
-
   return (
-    <div className="ranking-page">
-      <h1>Ranking</h1>
-      <table className="ranking-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Username</th>
-            <th>Rating</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, index) => (
-            <tr key={user.id}>
-              <td>{index + 1}</td>
-              <td>
-                <Link to={`/users/${user.id}`}>{user.username}</Link>
-              </td>
-              <td>{user.rating}</td>
+    <Container className="mt-4">
+      <h1 className="mb-4">Ranking</h1>
+      {error && <Alert variant="danger">{error}</Alert>}
+      {users.length === 0 ? (
+        <p>Loading...</p>
+      ) : (
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Username</th>
+              <th>Rating</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {users.map((user, index) => (
+              <tr key={user.id}>
+                <td>{index + 1}</td>
+                <td>
+                  <Link to={`/users/${user.id}`} className="text-decoration-none">
+                    {user.username}
+                  </Link>
+                </td>
+                <td>{Math.round(user.rating)}</td> {/* Ensure rating is rounded */}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+    </Container>
   );
 }
 

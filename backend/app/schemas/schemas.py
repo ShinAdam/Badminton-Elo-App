@@ -41,7 +41,6 @@ class UserCreate(UserBase):
     picture: Optional[str] = None
 
 class UserUpdate(UserBase):
-    username: str = Field(None, title="Updated Username")
     password: str = Field(None, title="Updated Password")
     bio: Optional[str] = None
     picture: Optional[str] = None

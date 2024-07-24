@@ -2,37 +2,26 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding-top: 50px;
 }
 
-.create-match-form {
-    display: flex;
-    flex-direction: column;
+.form-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8f9fa; /* Light background to mimic form-container in login */
 }
 
-.create-match-form select,
-.create-match-form input {
-    margin: 10px 0;
-    padding: 10px;
-    font-size: 16px;
+.form-header {
+    margin-bottom: 1rem;
+    text-align: center;
 }
 
-.create-match-form button {
-    margin-top: 20px;
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
+.form-group {
+    margin-bottom: 1rem;
 }
 
-.error-message {
-    color: red;
-    margin-bottom: 10px;
-}
-
-@media (max-width: 600px) {
-    .create-match-form {
-        width: 90%;
-    }
+.submit-button {
+    width: 100%;
 }

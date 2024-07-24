@@ -48,28 +48,23 @@ async def create_user(
     username = data.get('username')
     password = data.get('password')
     bio = data.get('bio')
-    picture_data = data.get('picture')
+    picture_name = data.get('picture')  # Get preset picture name
 
     # Create user first
-    user_data = UserCreate(username=username, password=password, bio=bio)
+    user_data = UserCreate(username=username, password=password, bio=bio, picture=picture_name)
     try:
         db_user = crud_create_user(db, user_data)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"User creation failed: {e}")
 
-    # Handle file upload and save it with the new filename
-    if picture_data:
-        try:
-            header, encoded = picture_data.split(',', 1)
-            file_data = base64.b64decode(encoded)
-            picture_location = save_picture(file_data, db_user.id)
-            db_user.picture = picture_location
-            # Update user profile with picture path
-            db.commit()  # Assuming you need to commit the changes
-        except Exception as e:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Image processing failed: {e}")
+    # No need to handle file upload, just set the picture path
+    if picture_name:
+        picture_path = f"{picture_name}"
+        db_user.picture = picture_path
+        db.commit()
 
     return db_user
+
     
 @router.post("/token", response_model=Token)
 async def login_for_access_token(

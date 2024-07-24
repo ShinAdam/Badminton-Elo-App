@@ -1,32 +1,101 @@
 .match-detail {
   padding: 20px;
+  font-size: 1.1rem; /* Increase overall text size slightly */
 }
 
 .match-title {
-  text-align: center;
   margin-bottom: 20px;
+  font-size: 1.5rem; /* Increase title size */
 }
 
-.match-info {
+.match-table {
+  background-color: #f8f9fa; /* Default background for the table */
+}
+
+.match-table .winner-section {
+  background-color: #e7f0ff; /* Light blue background for winners section */
+  text-align: center;
+}
+
+.match-table .loser-section {
+  background-color: #f8d7da; /* Light red background for losers section */
+  text-align: center;
+}
+
+.match-table th, .match-table td {
+  text-align: center; /* Center-align headers and cells */
+}
+
+.match-table td {
+  vertical-align: middle;
+}
+
+.match-table td .elo-change {
+  font-size: 1.2rem; /* Increase font size for ELO change */
+}
+
+.username {
+  font-size: 1.2rem; /* Increase font size for usernames */
+  font-weight: bold; /* Bold usernames */
+}
+
+.score-section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  font-size: 1.4rem; /* Increase font size of the score */
 }
 
-.winner-stats,
-.loser-stats {
-  margin-top: 10px;
+.match-date {
+  font-style: italic; /* Italicize date for emphasis */
+  font-size: 1rem; /* Adjust font size to fit nicely */
+  margin-top: 5px; /* Add margin above the date */
 }
 
-.loading-message,
-.error-message {
-  text-align: center;
-  color: red;
-  margin-top: 20px;
+.match-row:hover {
+  background-color: #e9ecef; /* Slightly darker background on hover */
 }
 
-@media (max-width: 600px) {
-  .match-info {
-      padding: 10px;
+.date-row {
+  background-color: transparent; /* No additional background */
+  border-top: none; /* No border on top */
+}
+
+/* Hide mobile table by default */
+.match-table-mobile {
+  display: none;
+}
+
+/* Show mobile table and hide desktop table on small screens */
+@media (max-width: 768px) {
+  .match-table {
+    display: none;
+  }
+  .match-table-mobile {
+    display: table;
+  }
+
+  .match-table-mobile .winner-section {
+    background-color: #e7f0ff;
+  }
+
+  .match-table-mobile .loser-section {
+    background-color: #f8d7da;
+  }
+
+  .match-table-mobile th, .match-table-mobile td {
+    font-size: 1rem; /* Adjust font size for mobile */
+  }
+
+  .match-table-mobile .score-section {
+    font-size: 1.2rem; /* Adjust font size for mobile */
+  }
+
+  .match-table-mobile .match-date {
+    font-size: 0.8rem; /* Adjust font size to fit nicely */
+  }
+
+  .match-table-mobile .username {
+    font-size: 1rem; /* Adjust font size for usernames on mobile */
   }
 }

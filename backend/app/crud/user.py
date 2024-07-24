@@ -52,12 +52,7 @@ def crud_update_user(db: Session, user_id: int, user_data: UserUpdate, current_u
     db_user.bio = user_data.bio
 
     if user_data.picture:
-        try:
-            picture_data = base64.b64decode(user_data.picture)
-            picture_path = save_picture(picture_data, user_id)
-            db_user.picture = picture_path
-        except ValueError as e:
-            raise HTTPException(status_code=400, detail=str(e))
+        db_user.picture = user_data.picture
 
     db.commit()
     db.refresh(db_user)
