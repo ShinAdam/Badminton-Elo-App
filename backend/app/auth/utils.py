@@ -1,7 +1,6 @@
 from datetime import timedelta, datetime, timezone
 import imghdr
 import os
-from typing import Annotated
 from fastapi import Depends, HTTPException
 from pydantic import BaseModel
 from starlette import status
@@ -60,7 +59,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
         # Log or print the token
-    print("Generated Token:", encoded_jwt)  # This will print to the console/log
+    print("Generated Token:", encoded_jwt)
     
     return encoded_jwt
 
@@ -71,7 +70,7 @@ def get_current_user(token: str = Depends(oauth2_bearer)) -> dict:
         headers={"WWW-Authenticate": "Bearer"},
     )
     
-    payload = verify_token(token)  # Use verify_token to decode and validate the token
+    payload = verify_token(token)
     username: str = payload.get("sub")
     user_id: int = payload.get("id")
     

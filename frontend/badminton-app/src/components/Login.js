@@ -1,9 +1,9 @@
-import { jwtDecode } from 'jwt-decode'; // Corrected the import statement
+import { jwtDecode } from 'jwt-decode';
 import React, { useState } from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosConfig';
-import './Login.css'; // Import the CSS file
+import './Login.css';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -24,15 +24,12 @@ const Login = () => {
 
             if (response.status === 200) {
                 const { access_token } = response.data;
-                const decodedToken = jwtDecode(access_token); // Use named import
-                const userId = decodedToken.id; // Extract user ID from token
+                const decodedToken = jwtDecode(access_token);
+                const userId = decodedToken.id;
                 
-                // Save the token in localStorage
                 localStorage.setItem('access_token', access_token);
 
-                // Update the global state or context if needed
-                // Example: Force a navigation to trigger UI update
-                navigate(`/users/${userId}`, { replace: true }); // Use replace to avoid adding to history stack
+                navigate(`/users/${userId}`, { replace: true });
                 window.location.reload(); // Reload the page
             } else {
                 setErrorMessage('Login failed');
@@ -81,7 +78,7 @@ const Login = () => {
                         Back to Home
                     </Button>
                     <Button variant="link" onClick={() => navigate('/auth/register')}>
-                        Don't have an account? Sign up
+                        New? Sign up
                     </Button>
                 </div>
             </div>

@@ -1,9 +1,7 @@
-import base64
 from fastapi import HTTPException
-from psycopg2 import IntegrityError
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
-from app.auth.utils import get_password_hash, save_picture
+from app.auth.utils import get_password_hash
 from app.models.models import User, Match
 from app.schemas.schemas import UserCreate, UserUpdate
 

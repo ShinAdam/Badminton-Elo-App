@@ -15,7 +15,7 @@ const NavigationBar = () => {
 
     const handleLogout = async () => {
         try {
-            await logout(); // Call the logout function from context
+            await logout();
         } catch (error) {
             console.error('Logout failed', error);
         }
@@ -24,23 +24,23 @@ const NavigationBar = () => {
     const handleCreateMatchClick = () => {
         if (!isAuthenticated) {
             setErrorMessage('You need to be logged in to create a match.');
-            setTimeout(() => setErrorMessage(''), 3000); // Clear the message after 3 seconds
-            navigate('/auth/login'); // Redirect to login if not authenticated
+            setTimeout(() => setErrorMessage(''), 3000);
+            navigate('/auth/login');
         } else {
-            navigate('/matches/create'); // Navigate to create match if authenticated
+            navigate('/matches/create');
         }
     };
 
     const handleDashboardClick = () => {
         if (!isAuthenticated) {
             setErrorMessage('You need to be logged in to access the dashboard.');
-            setTimeout(() => setErrorMessage(''), 3000); // Clear the message after 3 seconds
-            navigate('/auth/login'); // Redirect to login if not authenticated
+            setTimeout(() => setErrorMessage(''), 3000);
+            navigate('/auth/login');
         } else if (currentUserId) {
-            navigate(`/users/${currentUserId}`); // Navigate to user profile if authenticated
+            navigate(`/users/${currentUserId}`);
         } else {
             setErrorMessage('Unable to retrieve user information.');
-            setTimeout(() => setErrorMessage(''), 3000); // Clear the message after 3 seconds
+            setTimeout(() => setErrorMessage(''), 3000);
         }
     };
 

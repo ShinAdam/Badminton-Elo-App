@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import './App.css'; // Create this file for your styles
+import './App.css';
 import CreateMatch from './components/CreateMatch';
 import FullMatchHistory from './components/FullMatchHistory';
 import Home from './components/Home';

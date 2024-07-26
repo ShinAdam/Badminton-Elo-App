@@ -1,37 +1,7 @@
-/* Container for the whole login page */
 .login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
     padding-top: 50px;
-}
-
-/* Container for the login form */
-.form-container {
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
-    border-radius: 8px;
-}
-
-/* Additional styles for the login header */
-.login-header {
-    margin-bottom: 1rem; /* Equivalent to 4 units */
-    text-align: center;
-}
-
-/* Styles for the form and buttons */
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.submit-button {
-    width: 100%;
-}
-
-.action-buttons {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: space-between;
 }

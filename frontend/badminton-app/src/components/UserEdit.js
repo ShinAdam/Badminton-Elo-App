@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../api/axiosConfig';
-import './UserEdit.css'; // Import the CSS file for styling
+import './UserEdit.css';
 
 function UserEdit() {
   const { user_id } = useParams();
@@ -66,7 +66,7 @@ function UserEdit() {
       });
       if (response.status === 200) {
         setSuccessMessage('Profile updated successfully');
-        setTimeout(() => navigate(`/users/${user_id}`), 2000); // Redirect after 2 seconds
+        setTimeout(() => navigate(`/users/${user_id}`), 2000);
       } else {
         console.error('Profile update failed');
       }

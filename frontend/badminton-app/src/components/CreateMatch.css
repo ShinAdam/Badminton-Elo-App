@@ -4,24 +4,3 @@
     align-items: center;
     padding-top: 50px;
 }
-
-.form-container {
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f8f9fa; /* Light background to mimic form-container in login */
-}
-
-.form-header {
-    margin-bottom: 1rem;
-    text-align: center;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.submit-button {
-    width: 100%;
-}

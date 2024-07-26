@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosConfig';
-import './Register.css'; // Import the CSS file
+import './Register.css';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -64,7 +64,7 @@ const Register = () => {
             });
 
             if (response.status === 201) {
-                navigate('/'); // Redirect to home page
+                navigate('/');
             } else {
                 console.error('Registration failed');
             }
@@ -169,7 +169,7 @@ const Register = () => {
                         Back to Home
                     </Button>
                     <Button variant="link" onClick={() => navigate('/auth/login')}>
-                        Already have an account? Sign in
+                        Already a user? Sign in
                     </Button>
                 </div>
             </div>

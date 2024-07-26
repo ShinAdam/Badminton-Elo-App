@@ -1,5 +1,4 @@
-/* Styles for mobile devices */
-@media (max-width: 992px) { /* Adjust this breakpoint as needed */
+@media (max-width: 992px) {
   .navbar-collapse {
       display: flex;
       flex-direction: column;
@@ -12,6 +11,6 @@
   }
 
   .navbar-nav .nav-link {
-      margin: 0rem 0; /* Adjust spacing between items */
+      margin: 0rem 0;
   }
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosConfig';
-import './CreateMatch.css'; // Import the CSS file
+import './CreateMatch.css';
 
 const CreateMatch = () => {
     const navigate = useNavigate();
@@ -31,7 +31,6 @@ const CreateMatch = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        // Check if the selected date is in the future
         const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
         if (datePlayed > today) {
             setError('Date cannot be in the future.');
@@ -54,11 +53,11 @@ const CreateMatch = () => {
             });
     
             if (response.status === 200) {
-                console.log('Response data:', response.data); // Log the response data
-                const { id: matchId } = response.data; // Extract match_id from response data
+                console.log('Response data:', response.data);
+                const { id: matchId } = response.data;
                 
                 if (matchId) {
-                    navigate(`/matches/${matchId}`); // Redirect to the created match page
+                    navigate(`/matches/${matchId}`);
                 } else {
                     setError('Match ID not received. Unable to navigate.');
                 }
@@ -159,7 +158,7 @@ const CreateMatch = () => {
                             placeholder="Date of Match"
                             value={datePlayed}
                             onChange={(e) => setDatePlayed(e.target.value)}
-                            max={new Date().toISOString().split('T')[0]} // Restrict future dates
+                            max={new Date().toISOString().split('T')[0]}
                             required
                         />
                     </Form.Group>

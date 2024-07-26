@@ -7,7 +7,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [currentUserId, setCurrentUserId] = useState(null);
-    const [currentUsername, setCurrentUsername] = useState(''); // Add this state
+    const [currentUsername, setCurrentUsername] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
             if (!token) {
                 setIsAuthenticated(false);
                 setCurrentUserId(null);
-                setCurrentUsername(''); // Clear username if not authenticated
+                setCurrentUsername('');
                 return;
             }
 
@@ -26,11 +26,11 @@ export function AuthProvider({ children }) {
                 });
                 setIsAuthenticated(true);
                 setCurrentUserId(response.data.id);
-                setCurrentUsername(response.data.username); // Set the username
+                setCurrentUsername(response.data.username);
             } catch (err) {
                 setIsAuthenticated(false);
                 setCurrentUserId(null);
-                setCurrentUsername(''); // Clear username on error
+                setCurrentUsername('');
             }
         };
 
@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
                 headers: { Authorization: `Bearer ${access_token}` }
             });
             setCurrentUserId(userResponse.data.id);
-            setCurrentUsername(userResponse.data.username); // Set the username
+            setCurrentUsername(userResponse.data.username);
         } catch (err) {
             console.error('Login failed', err);
         }
@@ -61,8 +61,8 @@ export function AuthProvider({ children }) {
             localStorage.removeItem('access_token');
             setIsAuthenticated(false);
             setCurrentUserId(null);
-            setCurrentUsername(''); // Clear username on logout
-            navigate('/auth/login'); // Redirect to login page
+            setCurrentUsername('');
+            navigate('/auth/login');
         } catch (err) {
             console.error('Logout failed', err);
         }

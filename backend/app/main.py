@@ -2,7 +2,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
-from app.routers import users, matches, statistics, auth, test, register
+from app.routers import users, matches, statistics, auth, register
 from app.database.database import Base, engine
 
 app = FastAPI()
@@ -29,5 +29,4 @@ app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(matches.router)
 app.include_router(statistics.router)
-app.include_router(test.router)
 app.include_router(register.router)

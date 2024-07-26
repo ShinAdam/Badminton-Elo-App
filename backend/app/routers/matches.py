@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
 from app.auth.utils import get_current_user
 from app.crud.match import crud_create_match, crud_get_match_by_id
 from app.schemas.schemas import Match, MatchCreate
@@ -12,7 +11,6 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-# Match endpoints
 @router.post("/create", response_model=Match)
 def create_match(match: MatchCreate, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     db_match = crud_create_match(db=db, match=match, current_user_id=current_user["id"])

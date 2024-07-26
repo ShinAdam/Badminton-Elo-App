@@ -44,7 +44,7 @@ function Ranking() {
                     {user.username}
                   </Link>
                 </td>
-                <td>{Math.round(user.rating)}</td> {/* Ensure rating is rounded */}
+                <td>{Math.round(user.rating)}</td>
               </tr>
             ))}
           </tbody>

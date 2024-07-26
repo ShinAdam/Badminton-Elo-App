@@ -1,24 +1,18 @@
-import base64
 from datetime import timedelta
-import logging
-import os
-from typing import Annotated, Optional
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
+from typing import Annotated
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from starlette import status
 from app.crud.user import crud_create_user
-from app.database.database import SessionLocal, get_db
-from app.models.models import User
+from app.database.database import get_db
 from fastapi.security import OAuth2PasswordRequestForm
 from app.schemas.schemas import UserCreate
-from app.auth.utils import ACCESS_TOKEN_EXPIRE_MINUTES, LoginRequest, get_password_hash, create_access_token, authenticate_user, Token, get_current_user, revoke_token, save_picture, oauth2_bearer
+from app.auth.utils import ACCESS_TOKEN_EXPIRE_MINUTES, LoginRequest, create_access_token, authenticate_user, Token, get_current_user, revoke_token, oauth2_bearer
 
 router = APIRouter(
     prefix="/auth",
     tags=["auth"]
 )
-
-db_dependency = Annotated[Session, Depends(get_db)]
 
 @router.post("/login", response_model=Token)
 async def login_for_access_token(
@@ -50,14 +44,12 @@ async def create_user(
     bio = data.get('bio')
     picture_name = data.get('picture')  # Get preset picture name
 
-    # Create user first
     user_data = UserCreate(username=username, password=password, bio=bio, picture=picture_name)
     try:
         db_user = crud_create_user(db, user_data)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"User creation failed: {e}")
 
-    # No need to handle file upload, just set the picture path
     if picture_name:
         picture_path = f"{picture_name}"
         db_user.picture = picture_path
@@ -69,7 +61,7 @@ async def create_user(
 @router.post("/token", response_model=Token)
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    db: db_dependency
+    db: Annotated[Session, Depends(get_db)]
 ):
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
