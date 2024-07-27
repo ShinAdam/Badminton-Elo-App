@@ -58,9 +58,6 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-        # Log or print the token
-    print("Generated Token:", encoded_jwt)
-    
     return encoded_jwt
 
 def get_current_user(token: str = Depends(oauth2_bearer)) -> dict:

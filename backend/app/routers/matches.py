@@ -26,7 +26,6 @@ def create_match(match: MatchCreate, db: Session = Depends(get_db), current_user
     )
     return response_match
 
-
 @router.get("/{match_id}", response_model=Match)
 def get_match_by_match_id(match_id: int, db: Session = Depends(get_db)):
     match = crud_get_match_by_id(db, match_id)
@@ -40,6 +39,7 @@ def get_match_by_match_id(match_id: int, db: Session = Depends(get_db)):
         match.loser_usernames = ','.join([user.username for user in match.losers])
     
     return match
+
 
 #Edit match feature, to be updated later
 #@router.put("/{match_id}", response_model=Match)

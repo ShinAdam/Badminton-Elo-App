@@ -86,8 +86,8 @@ def read_user_matches(user_id: int, db: Session = Depends(get_db)):
         {
             "id": match.id,
             "creator_id": match.creator_id,
-            "winner_usernames": match.winner_usernames.strip('{}').replace(',', ', '),
-            "loser_usernames": match.loser_usernames.strip('{}').replace(',', ', '),
+            "winner_usernames": match.winner_usernames.strip('{}').replace(',', ', ') if match.winner_usernames else 'N/A',
+            "loser_usernames": match.loser_usernames.strip('{}').replace(',', ', ') if match.loser_usernames else 'N/A',
             "winner_avg_rating": match.winner_avg_rating,
             "loser_avg_rating": match.loser_avg_rating,
             "elo_change_winner": match.elo_change_winner,

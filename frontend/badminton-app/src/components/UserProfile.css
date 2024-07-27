@@ -109,3 +109,42 @@
 .loading-message {
     font-weight: bold;
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .pagination button {
+    margin: 0 5px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    font-size: 1em;
+  }
+  
+  .pagination button.active {
+    background-color: #4171d6;
+    color: white;
+  }
+  
+  .pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .pagination button:hover:not(:disabled) {
+    background-color: #ddd;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  

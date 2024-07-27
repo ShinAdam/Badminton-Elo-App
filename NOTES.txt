@@ -1,10 +1,5 @@
 Next steps
 
-fix frontend.
-adamshin
-asd 
-
-
 4. Docker
 
 

@@ -10,6 +10,8 @@ def crud_get_all_matches(db: Session) -> list[Match]:
 def crud_get_match_by_id(db: Session, match_id: int) -> Match:
     return db.query(Match).filter(Match.id == match_id).first()
 
+def crud_get_recent_matches(db: Session, limit: int = 5) -> list[Match]:
+    return db.query(Match).order_by(Match.date_played.desc()).limit(limit).all()
 
 def crud_create_match(db: Session, match: MatchCreate, current_user_id: int) -> Match:
     # Ensure exactly 4 unique users are provided
