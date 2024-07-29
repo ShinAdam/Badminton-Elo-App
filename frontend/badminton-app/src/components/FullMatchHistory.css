@@ -5,33 +5,3 @@
 .match-row:hover {
   background-color: #3400f0;
 }
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-}
-
-.page-item {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 0.5rem 1rem;
-  margin: 0 0.25rem;
-  background-color: #fff;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.page-item.active {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.page-item:hover {
-  background-color: #e9ecef;
-}
-
-.page-item:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}

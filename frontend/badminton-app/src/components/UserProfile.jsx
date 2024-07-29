@@ -1,5 +1,6 @@
 import 'chart.js/auto';
 import React, { useEffect, useState } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../api/axiosConfig';
@@ -130,147 +131,163 @@ function UserProfile() {
   }
 
   return (
-    <div className="user-profile">
-      <div className="profile-header">
-        <img
-          src={pictureUrl}
-          alt={`${user.username}'s profile`}
-          className="profile-picture"
-        />
-        <h1 className="profile-username">{user.username}</h1>
-        <div className="profile-elo-container">
-          <p className="profile-elo">ELO: {Math.round(user.rating)}</p>
-          <div className="win-percentage-chart">
-            <Doughnut data={winLossData} options={options} />
-            <div className="win-percentage-text">
-              {winPercentage}%
+    <Container className="user-profile-container">
+      <Row className="mb-4">
+        <Col xs={12}>
+          <div className="user-profile">
+            <div className="profile-header text-center">
+              <img
+                src={pictureUrl}
+                alt={`${user.username}'s profile`}
+                className="profile-picture"
+              />
+              <h1 className="profile-username">{user.username}</h1>
+              <div className="profile-elo-container d-flex flex-column align-items-center">
+                <p className="profile-elo">ELO: {Math.round(user.rating)}</p>
+                <div className="win-percentage-chart">
+                  <Doughnut data={winLossData} options={options} />
+                  <div className="win-percentage-text">
+                    {winPercentage}%
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="user-details mt-4">
+              <p><strong>Bio:</strong> {user.bio || 'N/A'}</p>
+            </div>
+            {currentUserId && currentUserId.toString() === user.id.toString() && (
+              <div className="edit-profile text-center mt-4">
+                <Link to={`/users/${user.id}/edit`}>
+                  Edit Profile
+                </Link>
+              </div>
+            )}
+          </div>
+        </Col>
+      </Row>
+      <Row className="my-4">
+        <Col>
+          <h1 className="text-center mb-4">Match History</h1>
+          <div className="container">
+            <table className="table table-bordered table-striped table-custom">
+              <thead>
+                <tr>
+                  <th className="text-center d-none d-md-table-cell compact-column">ELO Change</th>
+                  <th className="text-center d-none d-md-table-cell compact-column">Average Rating</th>
+                  <th className="text-center flex-column username-column">Usernames</th>
+                  <th className="text-center compact-column">Score</th>
+                  <th className="text-center flex-column username-column">Usernames</th>
+                  <th className="text-center d-none d-md-table-cell compact-column">Average Rating</th>
+                  <th className="text-center d-none d-md-table-cell compact-column">ELO Change</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentMatches.map((match) => {
+                  const isUserWinner = match.winner_usernames.includes(user.username);
+                  return (
+                    <tr
+                      key={match.id}
+                      className="match-row"
+                      onClick={() => window.location.href = `/matches/${match.id}`}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {isUserWinner ? (
+                        <>
+                          <td className="text-center d-none d-md-table-cell winner-section compact-column"><strong>+{match.elo_change_winner}</strong></td>
+                          <td className="text-center d-none d-md-table-cell winner-section compact-column">{Math.round(match.winner_avg_rating)}</td>
+                          <td className="text-center winner-section flex-column username-column">
+                            <div className="username-container">
+                              {match.winner_usernames.split(',').map((username, index) => (
+                                <div key={index} className="username" style={{ fontWeight: username.trim() === profileUsername ? 'bold' : 'normal' }}>
+                                  {username.trim()}
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="text-center winner-section compact-column">
+                            {match.winner_score} - {match.loser_score}
+                            <div className="text-center date-section">
+                              {formatDate(match.date_played)}
+                            </div>
+                          </td>
+                          <td className="text-center winner-section flex-column username-column">
+                            <div className="username-container">
+                              {match.loser_usernames.split(',').map((username, index) => (
+                                <div key={index} className="username" style={{ fontWeight: username.trim() === profileUsername ? 'bold' : 'normal' }}>
+                                  {username.trim()}
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="text-center d-none d-md-table-cell winner-section compact-column">{Math.round(match.loser_avg_rating)}</td>
+                          <td className="text-center d-none d-md-table-cell winner-section compact-column">{match.elo_change_loser}</td>
+                        </>
+                      ) : (
+                        <>
+                          <td className="text-center d-none d-md-table-cell loser-section compact-column"><strong>{match.elo_change_loser}</strong></td>
+                          <td className="text-center d-none d-md-table-cell loser-section compact-column">{Math.round(match.loser_avg_rating)}</td>
+                          <td className="text-center loser-section flex-column username-column">
+                            <div className="username-container">
+                              {match.loser_usernames.split(',').map((username, index) => (
+                                <div key={index} className="username" style={{ fontWeight: username.trim() === profileUsername ? 'bold' : 'normal' }}>
+                                  {username.trim()}
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="text-center loser-section compact-column">
+                            {match.loser_score} - {match.winner_score}
+                            <div className="text-center date-section">
+                              {formatDate(match.date_played)}
+                            </div>
+                          </td>
+                          <td className="text-center loser-section flex-column username-column">
+                            <div className="username-container">
+                              {match.winner_usernames.split(',').map((username, index) => (
+                                <div key={index} className="username" style={{ fontWeight: username.trim() === profileUsername ? 'bold' : 'normal' }}>
+                                  {username.trim()}
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="text-center d-none d-md-table-cell loser-section compact-column">{Math.round(match.winner_avg_rating)}</td>
+                          <td className="text-center d-none d-md-table-cell loser-section compact-column">+{match.elo_change_winner}</td>
+                        </>
+                      )}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div className="pagination text-center">
+              <button
+                onClick={handleFirstPage}
+                disabled={currentPage === 1}
+                className="page-item"
+              >
+                &lt;&lt;
+              </button>
+              {pageNumbers.map((number) => (
+                <button
+                  key={number}
+                  onClick={() => handlePageChange(number)}
+                  className={`page-item ${currentPage === number ? 'active' : ''}`}
+                >
+                  {number}
+                </button>
+              ))}
+              <button
+                onClick={handleLastPage}
+                disabled={currentPage === totalPages}
+                className="page-item"
+              >
+                &gt;&gt;
+              </button>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="user-details">
-        <p><strong>Bio:</strong> {user.bio || 'N/A'}</p>
-      </div>
-      {currentUserId && currentUserId.toString() === user.id.toString() && (
-        <div className="edit-profile">
-          <Link to={`/users/${user.id}/edit`} className="nav-button">
-            Edit Profile
-          </Link>
-        </div>
-      )}
-      <div className="container my-4">
-        <h1 className="text-center mb-4">Match History</h1>
-
-        <table className="table table-bordered table-striped table-custom">
-          <thead>
-            <tr>
-              <th className="text-center d-none d-md-table-cell">ELO Change</th>
-              <th className="text-center d-none d-md-table-cell">Average Rating</th>
-              <th className="text-center">Usernames</th>
-              <th className="text-center">Score</th>
-              <th className="text-center">Usernames</th>
-              <th className="text-center d-none d-md-table-cell">Average Rating</th>
-              <th className="text-center d-none d-md-table-cell">ELO Change</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentMatches.map((match) => {
-              const isUserWinner = match.winner_usernames.includes(user.username);
-              return (
-                <tr
-                  key={match.id}
-                  className="match-row"
-                  onClick={() => window.location.href = `/matches/${match.id}`}
-                  style={{ cursor: 'pointer' }}
-                >
-                  {isUserWinner ? (
-                    <>
-                      <td className="text-center d-none d-md-table-cell winner-section"><strong>+{match.elo_change_winner}</strong></td>
-                      <td className="text-center d-none d-md-table-cell winner-section">{Math.round(match.winner_avg_rating)}</td>
-                      <td className="text-center winner-section">
-                        {match.winner_usernames.split(',').map((username, index) => (
-                          <div key={index} style={{ fontWeight: username.trim() === profileUsername ? 'bold' : 'normal' }}>
-                            {username.trim()}
-                          </div>
-                        ))}
-                      </td>
-                      <td className="text-center winner-section">
-                        {match.winner_score} - {match.loser_score}
-                        <div className="text-center date-section">
-                          {formatDate(match.date_played)}
-                        </div>
-                      </td>
-                      <td className="text-center winner-section">
-                        {match.loser_usernames.split(',').map((username, index) => (
-                          <div key={index} style={{ fontWeight: username.trim() === profileUsername ? 'bold' : 'normal' }}>
-                            {username.trim()}
-                          </div>
-                        ))}
-                      </td>
-                      <td className="text-center d-none d-md-table-cell winner-section">{Math.round(match.loser_avg_rating)}</td>
-                      <td className="text-center d-none d-md-table-cell winner-section">{match.elo_change_loser}</td>
-                    </>
-                  ) : (
-                    <>
-                      <td className="text-center d-none d-md-table-cell loser-section"><strong>{match.elo_change_loser}</strong></td>
-                      <td className="text-center d-none d-md-table-cell loser-section">{Math.round(match.loser_avg_rating)}</td>
-                      <td className="text-center loser-section">
-                        {match.loser_usernames.split(',').map((username, index) => (
-                          <div key={index} style={{ fontWeight: username.trim() === profileUsername ? 'bold' : 'normal' }}>
-                            {username.trim()}
-                          </div>
-                        ))}
-                      </td>
-                      <td className="text-center loser-section">
-                        {match.loser_score} - {match.winner_score}
-                        <div className="text-center date-section">
-                          {formatDate(match.date_played)}
-                        </div>
-                      </td>
-                      <td className="text-center loser-section">
-                        {match.winner_usernames.split(',').map((username, index) => (
-                          <div key={index} style={{ fontWeight: username.trim() === profileUsername ? 'bold' : 'normal' }}>
-                            {username.trim()}
-                          </div>
-                        ))}
-                      </td>
-                      <td className="text-center d-none d-md-table-cell loser-section">{Math.round(match.winner_avg_rating)}</td>
-                      <td className="text-center d-none d-md-table-cell loser-section">+{match.elo_change_winner}</td>
-                    </>
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-
-        <div className="pagination">
-          <button
-            onClick={handleFirstPage}
-            disabled={currentPage === 1}
-            className="nav-button"
-          >
-            First
-          </button>
-          {pageNumbers.map(number => (
-            <button
-              key={number}
-              onClick={() => handlePageChange(number)}
-              className={`nav-button ${currentPage === number ? 'active' : ''}`}
-            >
-              {number}
-            </button>
-          ))}
-          <button
-            onClick={handleLastPage}
-            disabled={currentPage === totalPages}
-            className="nav-button"
-          >
-            Last
-          </button>
-        </div>
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

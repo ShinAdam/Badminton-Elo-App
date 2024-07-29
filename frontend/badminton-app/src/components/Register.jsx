@@ -94,8 +94,9 @@ const Register = () => {
                 {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="form-group" controlId="formUsername">
-                        <Form.Label>Username</Form.Label>
+                        <Form.Label htmlFor="username">Username</Form.Label>
                         <Form.Control
+                            id="username"
                             type="text"
                             placeholder="Enter username"
                             value={username}
@@ -110,8 +111,9 @@ const Register = () => {
                         )}
                     </Form.Group>
                     <Form.Group className="form-group" controlId="formPassword">
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label htmlFor="password">Password</Form.Label>
                         <Form.Control
+                            id="password"
                             type="password"
                             placeholder="Enter password"
                             value={password}
@@ -126,15 +128,16 @@ const Register = () => {
                         )}
                     </Form.Group>
                     <Form.Group className="form-group" controlId="formBio">
-                        <Form.Label>Bio</Form.Label>
+                        <Form.Label htmlFor="bio">Bio</Form.Label>
                         <Form.Control
+                            id="bio"
                             as="textarea"
                             placeholder="Tell us about yourself"
                             value={bio}
                             onChange={(e) => setBio(e.target.value)}
                         />
                     </Form.Group>
-                    <Form.Group className="form-group" controlId="formPicture">
+                    <Form.Group className="form-group">
                         <Form.Label>Profile Picture</Form.Label>
                         <div className="custom-dropdown">
                             <div
@@ -169,7 +172,7 @@ const Register = () => {
                         Back to Home
                     </Button>
                     <Button variant="link" onClick={() => navigate('/auth/login')}>
-                        Already a user? Sign in
+                        Existing User? Sign in
                     </Button>
                 </div>
             </div>
