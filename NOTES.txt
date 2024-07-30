@@ -1,11 +1,6 @@
 Next steps
 
-change tables
-1. make elo change, average rating, score section tighter, username section larger
-
-4. Docker
-
-
 5. Deploy
 aws
 -try to deploy on custom https domain
+

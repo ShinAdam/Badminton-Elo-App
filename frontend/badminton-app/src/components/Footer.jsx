@@ -19,7 +19,7 @@ const Footer = () => {
         </Row>
         <Row className="justify-content-center">
           <Col className="d-flex justify-content-center">
-            <a href="https://github.com/ShinAdam/your-repository" target="_blank" rel="noopener noreferrer" className="footer-repo">
+            <a href="https://github.com/ShinAdam/Badminton-Elo-App" target="_blank" rel="noopener noreferrer" className="footer-repo">
                 <FaCodeBranch /> Source Code
             </a>
           </Col>

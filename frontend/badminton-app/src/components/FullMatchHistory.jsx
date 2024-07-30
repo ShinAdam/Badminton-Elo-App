@@ -72,13 +72,13 @@ function FullMatchHistory() {
       <table className="table table-bordered table-striped table-custom">
         <thead>
           <tr>
-            <th className="text-center d-none d-md-table-cell">ELO Change</th>
-            <th className="text-center d-none d-md-table-cell">Average Rating</th>
-            <th className="text-center">Usernames</th>
-            <th className="text-center">Score</th>
-            <th className="text-center">Usernames</th>
-            <th className="text-center d-none d-md-table-cell">Average Rating</th>
-            <th className="text-center d-none d-md-table-cell">ELO Change</th>
+            <th className="text-center d-none d-md-table-cell compact-column">ELO Change</th>
+            <th className="text-center d-none d-md-table-cell compact-column">Average Rating</th>
+            <th className="text-center flex-column username-column">Usernames</th>
+            <th className="text-center compact-column">Score</th>
+            <th className="text-center flex-column username-column">Usernames</th>
+            <th className="text-center d-none d-md-table-cell compact-column">Average Rating</th>
+            <th className="text-center d-none d-md-table-cell compact-column">ELO Change</th>
           </tr>
         </thead>
         <tbody>
@@ -89,26 +89,26 @@ function FullMatchHistory() {
               onClick={() => window.location.href = `/matches/${match.id}`}
               style={{ cursor: 'pointer' }}
             >
-              <td className="text-center d-none d-md-table-cell winner-section"><strong>+{match.elo_change_winner}</strong></td>
-              <td className="text-center d-none d-md-table-cell winner-section">{Math.round(match.winner_avg_rating)}</td>
-              <td className="text-center winner-section">
+              <td className="text-center d-none d-md-table-cell winner-section compact-column"><strong>+{match.elo_change_winner}</strong></td>
+              <td className="text-center d-none d-md-table-cell winner-section compact-column">{Math.round(match.winner_avg_rating)}</td>
+              <td className="text-center winner-section flex-column username-column">
                 {match.winner_usernames.split(',').map((username, index) => (
                   <div key={index} className="username">{username.trim()}</div>
                 ))}
               </td>
-              <td className="text-center score-section">
+              <td className="text-center score-section compact-column">
                 {match.winner_score} - {match.loser_score}
                 <div className="text-center date-section">
                   {formatDate(match.date_played)}
                 </div>
               </td>
-              <td className="text-center loser-section">
+              <td className="text-center loser-section flex-column username-column">
                 {match.loser_usernames.split(',').map((username, index) => (
                   <div key={index} className="username">{username.trim()}</div>
                 ))}
               </td>
-              <td className="text-center d-none d-md-table-cell loser-section">{Math.round(match.loser_avg_rating)}</td>
-              <td className="text-center d-none d-md-table-cell loser-section"><strong>{match.elo_change_loser}</strong></td>
+              <td className="text-center d-none d-md-table-cell loser-section compact-column">{Math.round(match.loser_avg_rating)}</td>
+              <td className="text-center d-none d-md-table-cell loser-section compact-column"><strong>{match.elo_change_loser}</strong></td>
             </tr>
           ))}
         </tbody>
