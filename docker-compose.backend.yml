@@ -9,11 +9,3 @@ services:
       SECRET_KEY: ${SECRET_KEY}
     volumes:
       - ./backend:/app
-
-  frontend:
-    build:
-      context: ./frontend/badminton-app
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
