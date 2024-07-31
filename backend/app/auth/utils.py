@@ -8,9 +8,13 @@ from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
+from dotenv import load_dotenv
 from app.models.models import User
 
-SECRET_KEY = 'secret123'
+
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 20
 
@@ -75,10 +79,8 @@ def get_current_user(token: str = Depends(oauth2_bearer)) -> dict:
         raise credentials_exception
     return {"username": username, "id": user_id}
 
-
 def get_password_hash(password: str) -> str:
     return bcrypt_context.hash(password)
-
 
 def save_picture(file_data: bytes, user_id: int) -> str:
     file_extension = imghdr.what(None, file_data)

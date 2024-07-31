@@ -10,11 +10,9 @@ COPY requirements.txt .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install ping utility
-RUN apt-get update && apt-get install -y iputils-ping
-
-# Install PostgreSQL client
-RUN apt-get update && apt-get install -y postgresql-client
+# Install ping utility and PostgreSQL client
+RUN apt-get update && \
+    apt-get install -y iputils-ping postgresql-client
 
 # Copy the rest of the application code
 COPY . .
