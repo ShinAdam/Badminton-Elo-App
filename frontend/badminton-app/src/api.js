@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for the API
-const API_URL = 'http://localhost:8000';
+const API_URL = 'http://api.shuttlestats.com';
 
 const axiosInstance = axios.create({
     baseURL: API_URL,

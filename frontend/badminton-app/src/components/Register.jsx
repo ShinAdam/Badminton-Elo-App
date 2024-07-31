@@ -20,7 +20,7 @@ const Register = () => {
             try {
                 const response = await axiosInstance.get('/preset_pictures');
                 if (response.status === 200) {
-                    const pictures = response.data.pictures.map(pic => `http://localhost:8000${pic}`);
+                    const pictures = response.data.pictures.map(pic => `http://api.shuttlestats.com${pic}`);
                     setPresetPictures(pictures);
                 } else {
                     console.error('Failed to fetch preset pictures');

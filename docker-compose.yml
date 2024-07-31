@@ -4,8 +4,9 @@ services:
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     ports:
       - "8000:8000"
-    env_file:
-      - .env.development
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
     volumes:
       - ./backend:/app
 
@@ -16,5 +17,3 @@ services:
       - "3000:80"
     depends_on:
       - backend
-    env_file:
-      - .env.development

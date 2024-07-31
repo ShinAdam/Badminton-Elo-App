@@ -19,7 +19,7 @@ os.makedirs(static_path, exist_ok=True)
 app.mount("/static", StaticFiles(directory=static_path), name="static")
 
 # Configure CORS
-frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+frontend_url = "https://shuttlestats.com"
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[frontend_url],
