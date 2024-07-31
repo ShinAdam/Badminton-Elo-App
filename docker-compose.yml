@@ -17,5 +17,3 @@ services:
       - "3000:80"
     depends_on:
       - backend
-    env_file:
-      - .env.development
