@@ -4,5 +4,3 @@ services:
       context: ./frontend/badminton-app
     ports:
       - "3000:80"
-    depends_on:
-      - backend
