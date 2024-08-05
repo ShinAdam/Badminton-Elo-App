@@ -14,10 +14,16 @@ My Web application is available daily from **12 PM to 12 AM**.
     - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
     - 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
 - ⚛️ [React](https://react.dev) for the frontend.
+    - 🅱️ [Bootstrap](https://getbootstrap.com/) for responsive design.
 - 🐋 [Docker Compose](https://www.docker.com) for development and production.
 - 🔒 Secure password hashing by default.
-- 🔑 JWT (JSON Web Token) authentication.
-- ☁️ [AWS EC2](https://aws.amazon.com/ec2/) Instance Launch
+- 🔑 [JWT](https://jwt.io/) (JSON Web Token) authentication.
+- 📞 [Nginx](https://nginx.org/en/) as a reverse proxy / load balancer.
+- ☁️ [AWS EC2](https://aws.amazon.com/ec2/) instance launch.
+
+## Description
+
+ShuttleStats is a web application designed to help badminton players track and analyze their game progress over time. Built to enhance the experience of competitive matches, this app allows you and your friends to log match results, view detailed statistics, and monitor progress over time.
 
 ## Screenshots
 
