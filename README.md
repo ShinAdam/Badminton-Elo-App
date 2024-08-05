@@ -5,7 +5,7 @@
 My Web application is available daily from **12 PM to 12 AM**.
 
 📅 **Operating Hours**:
-- 🕛 **12 PM** to 🕛 **12 AM**
+- 🌞 **12 PM** to 💤 **12 AM**
 
 ## Technology Stack and Features
 
@@ -18,6 +18,8 @@ My Web application is available daily from **12 PM to 12 AM**.
 - 🔒 Secure password hashing by default.
 - 🔑 JWT (JSON Web Token) authentication.
 - ☁️ [AWS EC2](https://aws.amazon.com/ec2/) Instance Launch
+
+## Screenshots
 
 ### Home
 
