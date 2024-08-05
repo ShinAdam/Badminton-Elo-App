@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance
 const axiosInstance = axios.create({
-  baseURL: 'http://api.shuttlestats.com',
+  baseURL: 'REACT_APP_API_BASE_URL',
   headers: {
     'Content-Type': 'application/json',
   },

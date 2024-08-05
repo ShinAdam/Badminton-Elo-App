@@ -3,4 +3,6 @@ services:
     build:
       context: ./frontend/badminton-app
     ports:
-      - "3000:80"
+      - "8000:80"
+    volumes:
+      - ./frontend/badminton-app:/app

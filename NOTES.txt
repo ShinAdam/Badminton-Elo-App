@@ -1,6 +1,0 @@
-Next steps
-
-5. Deploy
-aws
--try to deploy on custom https domain
-

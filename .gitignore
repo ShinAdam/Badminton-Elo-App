@@ -172,9 +172,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env.development
-.env.production
-.env
 .venv
 env/
 venv/
@@ -267,5 +264,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Custom
+deployment files/
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,windows,linux,macos
