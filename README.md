@@ -2,7 +2,7 @@
 
 ## Uptime ⏰
 
-My Web application is available daily from **12 PM to 12 AM**.
+My web application is available daily from **12 PM to 12 AM**.
 
 📅 **Operating Hours**:
 - 🌞 **12 PM** to 💤 **12 AM**
