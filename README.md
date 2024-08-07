@@ -2,10 +2,10 @@
 
 ## Uptime ⏰
 
-My web application is available daily from **12 PM to 12 AM**.
+My web application is available daily from **9 AM to 9 PM**.
 
 📅 **Operating Hours**:
-- 🌞 **12 PM** to 💤 **12 AM**
+- 🌞 **9 PM** to 💤 **9 AM**
 
 ## Technology Stack and Features
 
@@ -18,7 +18,7 @@ My web application is available daily from **12 PM to 12 AM**.
 - 🐋 [Docker Compose](https://www.docker.com) for development and production.
 - 🔒 Secure password hashing by default.
 - 🔑 [JWT](https://jwt.io/) (JSON Web Token) authentication.
-- 📞 [Nginx](https://nginx.org/en/) as a reverse proxy / load balancer.
+- 📞 [Nginx](https://nginx.org/en/) as a reverse proxy/load balancer.
 - ☁️ [AWS EC2](https://aws.amazon.com/ec2/) instance launch.
 
 ## Description
